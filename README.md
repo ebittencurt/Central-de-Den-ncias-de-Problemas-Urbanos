@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🏙️ Central de Denúncias de Problemas Urbanos - Backend
 
 > API REST para gerenciamento de denúncias de problemas urbanos (buracos, iluminação, limpeza, sinalização)
@@ -792,3 +793,6 @@ Para produção, migre para banco de dados real:
 **Última atualização:** 12 de Novembro de 2025  
 **Versão:** 1.0.0  
 **Status:** ✅ Produção-ready (com ressalvas acima)
+=======
+# Central-de-Denuncias-de-Problemas-Urbanos
+>>>>>>> ce39e0d8a054e11c88be8c677f40cbd5ce19823b
