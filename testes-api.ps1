@@ -38,7 +38,7 @@ $body2 = @{
     descricao = "Poste de iluminação quebrado há 2 semanas"
     categoria = "iluminacao"
     localizacao = "Avenida Brasil, 1200"
-    telefoneContato = "11987654321"
+    telefoneContato = "11987654321"S
     cidadao = "Maria Santos"
     usuarioEmail = "maria@example.com"
 } | ConvertTo-Json

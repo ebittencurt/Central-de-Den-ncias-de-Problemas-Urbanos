@@ -1,4 +1,4 @@
-# Script de Teste - Funcionalidade DELETE
+.# Script de Teste - Funcionalidade DELETE
 # Executar: .\teste-delete.ps1
 
 $baseUrl = "http://localhost:3000/api/denuncias"
