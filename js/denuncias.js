@@ -1,33 +1,6 @@
 // ===== CRUD E RENDERIZAÇÃO DE DENÚNCIAS =====
 
 /**
- * Exibir alerta de sucesso ou erro
- */
-function exibirAlerta(tipo, mensagem) {
-  const alertContainer = document.getElementById('alertContainer');
-  if (!alertContainer) return;
-
-  const alertClass = tipo === 'success' ? 'alert-success' : 'alert-danger';
-  const iconClass = tipo === 'success' ? 'check-circle' : 'exclamation-circle';
-  const titulo = tipo === 'success' ? 'Sucesso!' : 'Erro!';
-
-  const alertHtml = `
-    <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-      <i class="fas fa-${iconClass} me-2"></i>
-      <strong>${titulo}</strong> ${mensagem}
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-  `;
-
-  alertContainer.innerHTML = alertHtml;
-
-  // Auto-remover após 5 segundos
-  setTimeout(() => {
-    alertContainer.innerHTML = '';
-  }, 5000);
-}
-
-/**
  * Criar nova denúncia
  */
 async function criarDenuncia(formElement) {
@@ -42,7 +15,13 @@ async function criarDenuncia(formElement) {
     const formData = new FormData(formElement);
 
     // Adicionar email do usuário
-    formData.append('usuarioEmail', user.email);
+    formData.set('usuarioEmail', user.email);
+
+    // Debug: ver o que está sendo enviado
+    console.log('FormData enviando:');
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
 
     // Mostrar loading
     const loadingSpinner = document.getElementById('loadingSpinner');

@@ -1,28 +1,9 @@
 const store = require('../models/store');
 const { success, error } = require('../utils/response');
-const Joi = require('joi');
-
-// Schema de validação manual para campos obrigatórios
-const createSchema = Joi.object({
-  titulo: Joi.string().min(3).required(),
-  descricao: Joi.string().min(10).required(),
-  categoria: Joi.string().required(),
-  localizacao: Joi.string().required(),
-  telefoneContato: Joi.string().optional().allow('', null),
-  cidadao: Joi.string().required(),
-  usuarioEmail: Joi.string().email().required(),
-  status: Joi.string().valid('aberto', 'em_analise', 'resolvido').optional()
-});
 
 exports.create = (req, res, next) => {
   try {
-    // Validar campos obrigatórios
-    const { error: validationError } = createSchema.validate(req.body, { abortEarly: false });
-    if (validationError) {
-      const details = validationError.details.map(d => d.message);
-      return res.status(400).json({ success: false, status: 400, message: 'Erro de validação', errors: details });
-    }
-
+    // Validação é feita pelo middleware validate
     // Adicionar URL da imagem se foi feito upload
     const payload = { ...req.body };
     if (req.file) {

@@ -1,19 +1,33 @@
-// ===== MOCK DE PROBLEMAS RESOLVIDOS =====
-
-/**
- * Carregar problemas resolvidos da API
- */
-async function carregarResolvidos() {
+async function carregarResolvidos(categoria = '', status = 'resolvido') {
   try {
     const showcaseList = document.getElementById('showcaseList');
     if (!showcaseList) return;
 
     showcaseList.innerHTML = '<p class="text-muted text-center">Carregando problemas resolvidos...</p>';
 
-    const response = await apiGet('/denuncias/resolvidos');
+    
+    const params = {};
+    if (categoria) params.categoria = categoria;
+    if (status) params.status = status;
+
+    const response = await apiGet('/denuncias/resolvidos', params);
 
     if (response.data && response.data.length > 0) {
-      renderizarShowcase(response.data);
+      let dados = response.data;
+      
+      if (categoria) {
+        dados = dados.filter(item => item.categoria === categoria);
+      }
+      
+      if (status) {
+        dados = dados.filter(item => item.status === status);
+      }
+
+      if (dados.length > 0) {
+        renderizarShowcase(dados);
+      } else {
+        showcaseList.innerHTML = '<p class="text-muted text-center">Nenhum problema encontrado com os filtros selecionados.</p>';
+      }
     } else {
       showcaseList.innerHTML = '<p class="text-muted text-center">Nenhum problema resolvido ainda.</p>';
     }
@@ -27,9 +41,30 @@ async function carregarResolvidos() {
   }
 }
 
-/**
- * Renderizar cards de showcase
- */
+
+function setupFiltrosShowcase() {
+  const filterCategoria = document.getElementById('showcaseFilterCategoria');
+  const filterStatus = document.getElementById('showcaseFilterStatus');
+
+  // Carregar ao mudar os selects
+  if (filterCategoria) {
+    filterCategoria.addEventListener('change', () => {
+      const categoria = filterCategoria.value || '';
+      const status = filterStatus?.value || 'resolvido';
+      carregarResolvidos(categoria, status);
+    });
+  }
+
+  if (filterStatus) {
+    filterStatus.addEventListener('change', () => {
+      const categoria = filterCategoria?.value || '';
+      const status = filterStatus.value || 'resolvido';
+      carregarResolvidos(categoria, status);
+    });
+  }
+}
+
+
 function renderizarShowcase(resolvidos) {
   const showcaseList = document.getElementById('showcaseList');
   if (!showcaseList) return;
@@ -44,9 +79,7 @@ function renderizarShowcase(resolvidos) {
   });
 }
 
-/**
- * Criar HTML de um card de showcase
- */
+
 function criarCardShowcase(resolvido) {
   const imagemHtml = resolvido.imagemUrl
     ? `<img src="http://localhost:3000${resolvido.imagemUrl}" class="card-img-top" alt="${resolvido.titulo}" style="height: 200px; object-fit: cover;">`
@@ -83,3 +116,8 @@ function criarCardShowcase(resolvido) {
     </div>
   `;
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  setupFiltrosShowcase();
+});
