@@ -29,7 +29,7 @@ const fileFilter = (req, file, cb) => {
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb(new Error('Apenas imagens são permitidas (jpeg, jpg, png, gif, webp)'));
+    cb(new Error('Apenas imagens são permitidas (jpeg, jpg, png, gif, webp)'), false);
   }
 };
 
@@ -42,4 +42,30 @@ const upload = multer({
   }
 });
 
-module.exports = upload;
+// Middleware para tratar erros de upload
+const handleUploadError = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ 
+        success: false, 
+        status: 400, 
+        message: 'Arquivo muito grande. Tamanho máximo: 5MB' 
+      });
+    }
+    return res.status(400).json({ 
+      success: false, 
+      status: 400, 
+      message: `Erro no upload: ${err.message}` 
+    });
+  }
+  if (err) {
+    return res.status(400).json({ 
+      success: false, 
+      status: 400, 
+      message: err.message 
+    });
+  }
+  next();
+};
+
+module.exports = { upload, handleUploadError };
