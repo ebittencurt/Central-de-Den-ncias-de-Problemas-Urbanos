@@ -1,13 +1,7 @@
-// ===== COMUNICAÇÃO COM API REST =====
-
 const API_BASE_URL = 'http://localhost:3000/api';
 
-/**
- * GET genérico com suporte a query parameters
- */
 async function apiGet(endpoint, params = {}) {
   try {
-    // Construir URL com query parameters
     const url = new URL(`${API_BASE_URL}${endpoint}`);
     Object.keys(params).forEach(key => {
       if (params[key] !== '' && params[key] !== null && params[key] !== undefined) {
@@ -15,7 +9,6 @@ async function apiGet(endpoint, params = {}) {
       }
     });
 
-    // Fazer requisição GET
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
@@ -23,13 +16,11 @@ async function apiGet(endpoint, params = {}) {
       }
     });
 
-    // Tratar erros HTTP
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || `Erro HTTP ${response.status}`);
     }
 
-    // Retornar JSON
     return await response.json();
   } catch (error) {
     console.error('Erro em apiGet:', error);
@@ -37,9 +28,6 @@ async function apiGet(endpoint, params = {}) {
   }
 }
 
-/**
- * POST com JSON
- */
 async function apiPost(endpoint, data) {
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -51,13 +39,11 @@ async function apiPost(endpoint, data) {
       body: JSON.stringify(data)
     });
 
-    // Tratar erros HTTP
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || `Erro HTTP ${response.status}`);
     }
 
-    // Retornar JSON
     return await response.json();
   } catch (error) {
     console.error('Erro em apiPost:', error);
@@ -65,25 +51,18 @@ async function apiPost(endpoint, data) {
   }
 }
 
-/**
- * POST com FormData (para upload de arquivos)
- * NÃO definir Content-Type pois o navegador irá definir com multipart/form-data
- */
 async function apiPostFormData(endpoint, formData) {
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
       body: formData,
-      // NÃO definir Content-Type aqui
     });
 
-    // Tratar erros HTTP
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || `Erro HTTP ${response.status}`);
     }
 
-    // Retornar JSON
     return await response.json();
   } catch (error) {
     console.error('Erro em apiPostFormData:', error);
@@ -91,9 +70,6 @@ async function apiPostFormData(endpoint, formData) {
   }
 }
 
-/**
- * PATCH para atualizar parcialmente
- */
 async function apiPatch(endpoint, data) {
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -105,13 +81,11 @@ async function apiPatch(endpoint, data) {
       body: JSON.stringify(data)
     });
 
-    // Tratar erros HTTP
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || `Erro HTTP ${response.status}`);
     }
 
-    // Retornar JSON
     return await response.json();
   } catch (error) {
     console.error('Erro em apiPatch:', error);
@@ -119,9 +93,6 @@ async function apiPatch(endpoint, data) {
   }
 }
 
-/**
- * DELETE para excluir recursos
- */
 async function apiDelete(endpoint) {
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -131,13 +102,11 @@ async function apiDelete(endpoint) {
       }
     });
 
-    // Tratar erros HTTP
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || `Erro HTTP ${response.status}`);
     }
 
-    // Retornar JSON
     return await response.json();
   } catch (error) {
     console.error('Erro em apiDelete:', error);

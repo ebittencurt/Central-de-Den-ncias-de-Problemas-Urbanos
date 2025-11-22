@@ -2,13 +2,11 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Criar pasta uploads se não existir
 const uploadDir = path.join(__dirname, '../../uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Configuração de armazenamento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
@@ -20,7 +18,6 @@ const storage = multer.diskStorage({
   }
 });
 
-// Filtro para aceitar apenas imagens
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|gif|webp/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -33,7 +30,6 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Configuração do multer
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
@@ -42,7 +38,6 @@ const upload = multer({
   }
 });
 
-// Middleware para tratar erros de upload
 const handleUploadError = (err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {
