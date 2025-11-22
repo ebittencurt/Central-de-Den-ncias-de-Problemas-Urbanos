@@ -46,7 +46,6 @@ function setupFiltrosShowcase() {
   const filterCategoria = document.getElementById('showcaseFilterCategoria');
   const filterStatus = document.getElementById('showcaseFilterStatus');
 
-  // Carregar ao mudar os selects
   if (filterCategoria) {
     filterCategoria.addEventListener('change', () => {
       const categoria = filterCategoria.value || '';
@@ -86,6 +85,28 @@ function criarCardShowcase(resolvido) {
     : '';
 
   const dataResolucao = resolvido.resolvidoEm ? formatarData(resolvido.resolvidoEm) : 'Data não disponível';
+  const previsaoConclusao = resolvido.previsaoConclusao ? formatarData(resolvido.previsaoConclusao) : null;
+  
+  let badgeHtml = '';
+  let dataInfoHtml = '';
+  
+  if (resolvido.status === 'resolvido') {
+    badgeHtml = '<span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Resolvido</span>';
+    dataInfoHtml = `
+      <p class="mb-0">
+        <i class="fas fa-check-circle me-2"></i>
+        <strong>Resolvido em:</strong> ${dataResolucao}
+      </p>
+    `;
+  } else if (resolvido.status === 'em_analise') {
+    badgeHtml = '<span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i>Em Análise</span>';
+    dataInfoHtml = previsaoConclusao ? `
+      <p class="mb-0">
+        <i class="fas fa-calendar-check me-2"></i>
+        <strong>Previsão de Conclusão:</strong> ${previsaoConclusao}
+      </p>
+    ` : '';
+  }
 
   return `
     <div class="card mb-3 shadow-sm border-success">
@@ -93,9 +114,7 @@ function criarCardShowcase(resolvido) {
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-start mb-2">
           <h5 class="card-title mb-0">${escapeHtml(resolvido.titulo)}</h5>
-          <span class="badge bg-success">
-            <i class="fas fa-check-circle me-1"></i>Resolvido
-          </span>
+          ${badgeHtml}
         </div>
         <p class="card-text text-secondary mt-2">${escapeHtml(resolvido.descricao)}</p>
         <div class="small text-muted mb-3">
@@ -107,10 +126,7 @@ function criarCardShowcase(resolvido) {
             <i class="fas fa-tag me-2"></i>
             <strong>Categoria:</strong> ${escapeHtml(resolvido.categoria)}
           </p>
-          <p class="mb-0">
-            <i class="fas fa-check-circle me-2"></i>
-            <strong>Resolvido em:</strong> ${dataResolucao}
-          </p>
+          ${dataInfoHtml}
         </div>
       </div>
     </div>

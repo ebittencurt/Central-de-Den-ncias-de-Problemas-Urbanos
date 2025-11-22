@@ -1,8 +1,4 @@
-// ===== UTILITÁRIOS GERAIS =====
 
-/**
- * Exibir alerta de sucesso ou erro
- */
 function exibirAlerta(tipo, mensagem) {
   const alertContainer = document.getElementById('alertContainer');
   if (!alertContainer) {
@@ -24,15 +20,11 @@ function exibirAlerta(tipo, mensagem) {
 
   alertContainer.innerHTML = alertHtml;
 
-  // Auto-remover após 5 segundos
   setTimeout(() => {
     alertContainer.innerHTML = '';
   }, 5000);
 }
 
-/**
- * Formatar data no formato brasileiro
- */
 function formatarData(dataISO) {
   if (!dataISO) return 'Data não disponível';
 
@@ -49,26 +41,17 @@ function formatarData(dataISO) {
   }
 }
 
-/**
- * Validar formato de email
- */
 function validarEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
-/**
- * Validar telefone (formato brasileiro)
- */
 function validarTelefone(telefone) {
   if (!telefone) return true; // Telefone é opcional
   const telefoneRegex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
   return telefoneRegex.test(telefone);
 }
 
-/**
- * Debounce - executa função após delay
- */
 function debounce(func, delay) {
   let timeoutId;
   return function (...args) {

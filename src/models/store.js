@@ -1,6 +1,53 @@
 const { v4: uuidv4 } = require('uuid');
 
-let DB = [];
+
+let DB = [
+  {
+    id: 'mock-1',
+    titulo: 'Buraco na Avenida Principal',
+    descricao: 'Buraco grande na via que representa risco para motoristas e pedestres. Já foi resolvido pela prefeitura.',
+    categoria: 'pavimentacao',
+    localizacao: 'Avenida Principal, 500 - Centro',
+    telefoneContato: null,
+    cidadao: 'Cidadão Exemplo',
+    usuarioEmail: 'demo@email.com',
+    imagemUrl: '/imagens-showcase/Buraco_na_rua.jpeg',
+    status: 'resolvido',
+    criadoEm: '2025-11-10T08:00:00.000Z',
+    atualizadoEm: '2025-11-18T14:30:00.000Z',
+    resolvidoEm: '2025-11-18T14:30:00.000Z'
+  },
+  {
+    id: 'mock-2',
+    titulo: 'Lixo acumulado',
+    descricao: 'Lixo acumulado na rua causando mau cheiro e atraindo pragas. Problema já foi resolvido.',
+    categoria: 'limpeza',
+    localizacao: 'Rua das Flores, 234',
+    telefoneContato: null,
+    cidadao: 'Cidadão Exemplo',
+    usuarioEmail: 'demo@email.com',
+    imagemUrl: '/imagens-showcase/lixo_na_rua.png',
+    status: 'resolvido',
+    criadoEm: '2025-11-05T09:00:00.000Z',
+    atualizadoEm: '2025-11-12T16:00:00.000Z',
+    resolvidoEm: '2025-11-12T16:00:00.000Z'
+  },
+  {
+    id: 'mock-3',
+    titulo: 'Buraco na Rua Camélia',
+    descricao: 'Buraco profundo na rua que aumenta quando chove, necessita reparo urgente. Caso está sendo analisado pela equipe responsável.',
+    categoria: 'pavimentacao',
+    localizacao: 'Rua Camélia, 180',
+    telefoneContato: null,
+    cidadao: 'Cidadão Exemplo',
+    usuarioEmail: 'demo@email.com',
+    imagemUrl: '/imagens-showcase/buraco_na_rua-camelia.jpg',
+    status: 'em_analise',
+    criadoEm: '2025-11-20T10:00:00.000Z',
+    atualizadoEm: '2025-11-20T10:00:00.000Z',
+    previsaoConclusao: '2025-12-15T00:00:00.000Z'
+  }
+];
 
 function now() { return new Date().toISOString(); }
 

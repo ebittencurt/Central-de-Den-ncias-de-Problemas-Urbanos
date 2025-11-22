@@ -3,8 +3,6 @@ const { success, error } = require('../utils/response');
 
 exports.create = (req, res, next) => {
   try {
-    // Validação é feita pelo middleware validate
-    // Adicionar URL da imagem se foi feito upload
     const payload = { ...req.body };
     if (req.file) {
       payload.imagemUrl = `/uploads/${req.file.filename}`;
@@ -31,7 +29,6 @@ exports.update = (req, res, next) => {
   try {
     const id = req.params.id;
     
-    // Validação manual (quando usa upload, o validate middleware não processa req.body)
     const { titulo, descricao, categoria, localizacao, telefoneContato, cidadao, usuarioEmail } = req.body;
     
     const payload = { 
@@ -44,7 +41,6 @@ exports.update = (req, res, next) => {
       usuarioEmail 
     };
     
-    // Adiciona imagem se foi enviada
     if (req.file) {
       payload.imagemUrl = `/uploads/${req.file.filename}`;
     }
@@ -91,7 +87,6 @@ exports.deleteDenuncia = (req, res, next) => {
 
 exports.getResolvidos = (req, res, next) => {
   try {
-    // Mock de problemas resolvidos para showcase/propaganda
     const resolvidos = [
       {
         id: 'showcase-1',
@@ -105,6 +100,36 @@ exports.getResolvidos = (req, res, next) => {
       },
       {
         id: 'showcase-2',
+        titulo: 'Buraco na Avenida Principal',
+        descricao: 'Buraco grande na via que representa risco para motoristas e pedestres.',
+        categoria: 'pavimentacao',
+        localizacao: 'Avenida Principal, 500 - Centro',
+        imagemUrl: '/imagens-showcase/Buraco_na_rua.jpeg',
+        status: 'resolvido',
+        resolvidoEm: '2025-11-10T16:00:00.000Z'
+      },
+      {
+        id: 'showcase-3',
+        titulo: 'Lixo acumulado',
+        descricao: 'Lixo acumulado na rua causando mau cheiro e atraindo pragas.',
+        categoria: 'limpeza',
+        localizacao: 'Rua das Flores, 234',
+        imagemUrl: '/imagens-showcase/lixo_na_rua.png',
+        status: 'resolvido',
+        resolvidoEm: '2025-11-05T09:15:00.000Z'
+      },
+      {
+        id: 'showcase-4',
+        titulo: 'Buraco na Rua Camélia',
+        descricao: 'Buraco profundo na rua que aumenta quando chove, necessita reparo urgente.',
+        categoria: 'pavimentacao',
+        localizacao: 'Rua Camélia, 180',
+        imagemUrl: '/imagens-showcase/Buraco_na_rua.jpeg',
+        status: 'em_analise',
+        previsaoConclusao: '2025-12-15T00:00:00.000Z'
+      },
+      {
+        id: 'showcase-5',
         titulo: 'Iluminação precária na Avenida Artemia Pires',
         descricao: 'A avenida precisa de mais postes de iluminação para garantir a segurança dos pedestres durante a noite.',
         categoria: 'iluminacao',
@@ -114,17 +139,7 @@ exports.getResolvidos = (req, res, next) => {
         resolvidoEm: '2025-10-28T14:20:00.000Z'
       },
       {
-        id: 'showcase-3',
-        titulo: 'Lixo acumulado ',
-        descricao: 'Em nome de todos os moradores venho solicitar a limpeza deste local que está servindo de depósito de lixo e entulho.',
-        categoria: 'limpeza',
-        localizacao: 'Rua Santos Dumont, esquina com Rua 7 de Setembro',
-        imagemUrl: '/imagens-showcase/lixo_na_rua.png',
-        status: 'resolvido',
-        resolvidoEm: '2025-11-05T09:15:00.000Z'
-      },
-      {
-        id: 'showcase-4',
+        id: 'showcase-6',
         titulo: 'Falta de sinalizacao',
         descricao: 'Falta de sinalizacao no cruzamento das principais ruas do Jardim Brasil',
         categoria: 'sinalizacao',

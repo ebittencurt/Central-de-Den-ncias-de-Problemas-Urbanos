@@ -1,8 +1,4 @@
-// ===== CRUD E RENDERIZAÇÃO DE DENÚNCIAS =====
 
-/**
- * Criar nova denúncia
- */
 async function criarDenuncia(formElement) {
   try {
     const user = getUser();
@@ -11,45 +7,35 @@ async function criarDenuncia(formElement) {
       return false;
     }
 
-    // Criar FormData a partir do formulário
     const formData = new FormData(formElement);
 
-    // Adicionar email do usuário
     formData.set('usuarioEmail', user.email);
 
-    // Debug: ver o que está sendo enviado
     console.log('FormData enviando:');
     for (let [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
 
-    // Mostrar loading
     const loadingSpinner = document.getElementById('loadingSpinner');
     if (loadingSpinner) {
       loadingSpinner.classList.remove('d-none');
     }
 
-    // Fazer requisição
     const response = await apiPostFormData('/denuncias', formData);
 
-    // Esconder loading
     if (loadingSpinner) {
       loadingSpinner.classList.add('d-none');
     }
 
-    // Exibir sucesso
     exibirAlerta('success', 'Denúncia criada com sucesso!');
 
-    // Limpar formulário
     formElement.reset();
 
-    // Limpar preview de imagem
     const imagePreview = document.getElementById('imagePreview');
     if (imagePreview) {
       imagePreview.innerHTML = '';
     }
 
-    // Recarregar lista de denúncias
     await listarDenuncias();
 
     return true;
@@ -66,9 +52,6 @@ async function criarDenuncia(formElement) {
   }
 }
 
-/**
- * Listar denúncias do usuário logado
- */
 async function listarDenuncias(categoria = '', status = '', page = 1) {
   try {
     const user = getUser();
@@ -82,14 +65,12 @@ async function listarDenuncias(categoria = '', status = '', page = 1) {
 
     if (!listaDenuncias) return;
 
-    // Mostrar loading
     if (loadingSpinner) {
       loadingSpinner.classList.remove('d-none');
     }
 
     listaDenuncias.innerHTML = '';
 
-    // Montar query parameters
     const params = {
       usuarioEmail: user.email,
       page,
@@ -104,15 +85,12 @@ async function listarDenuncias(categoria = '', status = '', page = 1) {
       params.status = status;
     }
 
-    // Fazer requisição
     const response = await apiGet('/denuncias', params);
 
-    // Esconder loading
     if (loadingSpinner) {
       loadingSpinner.classList.add('d-none');
     }
 
-    // Renderizar resultados
     if (response.data && response.data.length > 0) {
       renderizarDenuncias(response.data);
       renderizarPaginacao(response.pagination, categoria, status);
@@ -131,9 +109,6 @@ async function listarDenuncias(categoria = '', status = '', page = 1) {
   }
 }
 
-/**
- * Renderizar cards de denúncias no DOM
- */
 function renderizarDenuncias(denuncias) {
   const listaDenuncias = document.getElementById('listaDenuncias');
   if (!listaDenuncias) return;
@@ -147,7 +122,6 @@ function renderizarDenuncias(denuncias) {
     listaDenuncias.appendChild(cardElement.firstElementChild);
   });
 
-  // Adicionar event listeners nos botões de excluir
   document.querySelectorAll('.btn-excluir').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const id = btn.getAttribute('data-id');
@@ -156,16 +130,13 @@ function renderizarDenuncias(denuncias) {
   });
 }
 
-/**
- * Criar HTML de um card de denúncia
- */
 function criarCardDenuncia(denuncia) {
   const badgeClass = getBadgeClass(denuncia.status);
   const icon = getStatusIcon(denuncia.status);
   const statusTexto = getStatusTexto(denuncia.status);
 
   const imagemHtml = denuncia.imagemUrl
-    ? `<img src="http://localhost:3000${denuncia.imagemUrl}" class="card-img-top" alt="${denuncia.titulo}" style="height: 200px; object-fit: cover;">`
+    ? `<img src="http://localhost:3000${denuncia.imagemUrl}" class="card-img-top" alt="${denuncia.titulo}" style="height: 300px; object-fit: cover;">`
     : '';
 
   const botaoExcluir = denuncia.status === 'aberto'
@@ -175,6 +146,23 @@ function criarCardDenuncia(denuncia) {
     : `<button class="btn btn-sm btn-danger btn-excluir" data-id="${denuncia.id}" disabled>
         <i class="fas fa-trash"></i> Excluir (bloqueado)
        </button>`;
+
+  let infoAdicional = '';
+  if (denuncia.status === 'resolvido' && denuncia.resolvidoEm) {
+    infoAdicional = `
+      <p class="mb-1">
+        <i class="fas fa-check-circle me-2"></i>
+        <strong>Resolvido em:</strong> ${formatarData(denuncia.resolvidoEm)}
+      </p>
+    `;
+  } else if (denuncia.status === 'em_analise' && denuncia.previsaoConclusao) {
+    infoAdicional = `
+      <p class="mb-1">
+        <i class="fas fa-calendar-check me-2"></i>
+        <strong>Previsão de Conclusão:</strong> ${formatarData(denuncia.previsaoConclusao)}
+      </p>
+    `;
+  }
 
   return `
     <div class="card mb-3 shadow-sm">
@@ -200,10 +188,11 @@ function criarCardDenuncia(denuncia) {
             <i class="fas fa-user me-2"></i>
             <strong>Cidadão:</strong> ${escapeHtml(denuncia.cidadao)}
           </p>
-          <p class="mb-0">
+          <p class="mb-1">
             <i class="fas fa-calendar me-2"></i>
             <strong>Data:</strong> ${formatarData(denuncia.criadoEm)}
           </p>
+          ${infoAdicional}
         </div>
         <div class="d-flex gap-2">
           ${botaoExcluir}
@@ -213,9 +202,6 @@ function criarCardDenuncia(denuncia) {
   `;
 }
 
-/**
- * Obter classe de badge por status
- */
 function getBadgeClass(status) {
   switch (status) {
     case 'aberto':
@@ -229,9 +215,6 @@ function getBadgeClass(status) {
   }
 }
 
-/**
- * Obter ícone por status
- */
 function getStatusIcon(status) {
   switch (status) {
     case 'aberto':
@@ -245,9 +228,6 @@ function getStatusIcon(status) {
   }
 }
 
-/**
- * Obter texto legível do status
- */
 function getStatusTexto(status) {
   switch (status) {
     case 'aberto':
@@ -261,9 +241,6 @@ function getStatusTexto(status) {
   }
 }
 
-/**
- * Formatar data ISO para legível
- */
 function formatarData(isoString) {
   try {
     const date = new Date(isoString);
@@ -279,48 +256,60 @@ function formatarData(isoString) {
   }
 }
 
-/**
- * Excluir denúncia
- */
 async function excluirDenuncia(id) {
-  try {
-    if (!confirm('Tem certeza que deseja excluir esta denúncia?')) {
-      return false;
-    }
+  return new Promise((resolve) => {
+    const modal = new bootstrap.Modal(document.getElementById('modalConfirmDelete'));
+    const btnConfirm = document.getElementById('btnConfirmDelete');
+    
+    modal.show();
+    
+    const handleConfirm = async () => {
+      try {
+        modal.hide();
+        
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        if (loadingSpinner) {
+          loadingSpinner.classList.remove('d-none');
+        }
 
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    if (loadingSpinner) {
-      loadingSpinner.classList.remove('d-none');
-    }
+        const response = await apiDelete(`/denuncias/${id}`);
 
-    const response = await apiDelete(`/denuncias/${id}`);
+        if (loadingSpinner) {
+          loadingSpinner.classList.add('d-none');
+        }
 
-    if (loadingSpinner) {
-      loadingSpinner.classList.add('d-none');
-    }
+        exibirAlerta('success', 'Denúncia excluída com sucesso!');
 
-    exibirAlerta('success', 'Denúncia excluída com sucesso!');
+        await listarDenuncias();
+        
+        btnConfirm.removeEventListener('click', handleConfirm);
+        resolve(true);
+      } catch (error) {
+        console.error('Erro ao excluir denúncia:', error);
 
-    // Recarregar lista
-    await listarDenuncias();
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        if (loadingSpinner) {
+          loadingSpinner.classList.add('d-none');
+        }
 
-    return true;
-  } catch (error) {
-    console.error('Erro ao excluir denúncia:', error);
-
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    if (loadingSpinner) {
-      loadingSpinner.classList.add('d-none');
-    }
-
-    exibirAlerta('danger', error.message);
-    return false;
-  }
+        exibirAlerta('danger', 'Erro ao excluir denúncia: ' + error.message);
+        
+        btnConfirm.removeEventListener('click', handleConfirm);
+        resolve(false);
+      }
+    };
+    
+    const handleCancel = () => {
+      btnConfirm.removeEventListener('click', handleConfirm);
+      resolve(false);
+    };
+    
+    btnConfirm.addEventListener('click', handleConfirm);
+    document.getElementById('modalConfirmDelete').addEventListener('hidden.bs.modal', handleCancel, { once: true });
+  });
 }
 
-/**
- * Renderizar paginação
- */
+
 function renderizarPaginacao(pagination, categoria = '', status = '') {
   const paginationContainer = document.getElementById('pagination');
   if (!paginationContainer || !pagination) return;
@@ -335,7 +324,6 @@ function renderizarPaginacao(pagination, categoria = '', status = '') {
   const ul = document.createElement('ul');
   ul.className = 'pagination justify-content-center';
 
-  // Botão anterior
   if (currentPage > 1) {
     const liPrev = document.createElement('li');
     liPrev.className = 'page-item';
@@ -347,7 +335,6 @@ function renderizarPaginacao(pagination, categoria = '', status = '') {
     ul.appendChild(liPrev);
   }
 
-  // Páginas
   for (let i = 1; i <= totalPages; i++) {
     if (
       i === 1 ||
@@ -371,7 +358,6 @@ function renderizarPaginacao(pagination, categoria = '', status = '') {
     }
   }
 
-  // Botão próximo
   if (currentPage < totalPages) {
     const liNext = document.createElement('li');
     liNext.className = 'page-item';
@@ -386,21 +372,16 @@ function renderizarPaginacao(pagination, categoria = '', status = '') {
   nav.appendChild(ul);
   paginationContainer.appendChild(nav);
 
-  // Event listeners para paginação
   document.querySelectorAll('[data-page]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const page = parseInt(btn.getAttribute('data-page'));
       listarDenuncias(categoria, status, page);
-      // Scroll para topo
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   });
 }
 
-/**
- * Setup preview de imagem
- */
 function setupImagePreview() {
   const fileInput = document.getElementById('imagem');
   const preview = document.getElementById('imagePreview');
@@ -411,7 +392,6 @@ function setupImagePreview() {
     const file = e.target.files[0];
 
     if (file) {
-      // Validar tipo de arquivo
       if (!file.type.startsWith('image/')) {
         exibirAlerta('danger', 'Por favor, selecione uma imagem válida');
         fileInput.value = '';
@@ -419,7 +399,6 @@ function setupImagePreview() {
         return;
       }
 
-      // Validar tamanho (máx 5MB)
       if (file.size > 5 * 1024 * 1024) {
         exibirAlerta('danger', 'A imagem não pode exceder 5MB');
         fileInput.value = '';
@@ -444,9 +423,6 @@ function setupImagePreview() {
   });
 }
 
-/**
- * Setup filtros de categoria e status
- */
 function setupFiltros() {
   const filterCategoria = document.getElementById('filterCategoria');
   const filterStatus = document.getElementById('filterStatus');
@@ -468,9 +444,6 @@ function setupFiltros() {
   }
 }
 
-/**
- * Setup do formulário de denúncia
- */
 function setupFormDenuncia() {
   const formDenuncia = document.getElementById('formDenuncia');
 
@@ -482,9 +455,6 @@ function setupFormDenuncia() {
   }
 }
 
-/**
- * Setup do botão refresh
- */
 function setupRefresh() {
   const btnRefresh = document.getElementById('btnRefresh');
 
@@ -498,9 +468,6 @@ function setupRefresh() {
   }
 }
 
-/**
- * Escapar HTML para evitar XSS
- */
 function escapeHtml(text) {
   if (!text) return '';
   const map = {
