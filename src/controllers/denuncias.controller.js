@@ -95,41 +95,41 @@ exports.getResolvidos = (req, res, next) => {
     const resolvidos = [
       {
         id: 'showcase-1',
-        titulo: 'Buraco na Avenida Principal corrigido',
-        descricao: 'Após denúncia dos moradores, a prefeitura realizou o recapeamento completo da via',
+        titulo: 'Buraco na Avenida Principal ',
+        descricao: 'Buraco se abriu na chuva forte que ocorreu no dia 28/10/2025.',
         categoria: 'pavimentacao',
-        localizacao: 'Avenida Principal, 1500 - Centro',
-        imagemUrl: '/uploads/exemplo-buraco-resolvido.jpg',
+        localizacao: 'Avenida Artemia Pires, 1500 - Santo Antonio',
+        imagemUrl: '/imagens-showcase/Buraco_na_rua.jpeg',
         status: 'resolvido',
         resolvidoEm: '2025-11-01T10:30:00.000Z'
       },
       {
         id: 'showcase-2',
-        titulo: 'Iluminação pública restaurada',
-        descricao: 'Substituição de 15 postes com lâmpadas LED de alta eficiência',
+        titulo: 'Iluminação precária na Avenida Artemia Pires',
+        descricao: 'A avenida precisa de mais postes de iluminação para garantir a segurança dos pedestres durante a noite.',
         categoria: 'iluminacao',
-        localizacao: 'Rua das Flores - Bairro Jardim',
-        imagemUrl: '/uploads/exemplo-iluminacao-resolvida.jpg',
+        localizacao: 'Avenida Artemia Pires, 1500 - Santo Antonio',
+        imagemUrl: '/imagens-showcase/iluminacao_avenida_artemia_pires.jpg',
         status: 'resolvido',
         resolvidoEm: '2025-10-28T14:20:00.000Z'
       },
       {
         id: 'showcase-3',
-        titulo: 'Limpeza de terreno baldio concluída',
-        descricao: 'Remoção de entulho e lixo acumulado, área cercada para evitar novos descartes',
+        titulo: 'Lixo acumulado ',
+        descricao: 'Em nome de todos os moradores venho solicitar a limpeza deste local que está servindo de depósito de lixo e entulho.',
         categoria: 'limpeza',
         localizacao: 'Rua Santos Dumont, esquina com Rua 7 de Setembro',
-        imagemUrl: '/uploads/exemplo-limpeza-resolvida.jpg',
+        imagemUrl: '/imagens-showcase/lixo_na_rua.png',
         status: 'resolvido',
         resolvidoEm: '2025-11-05T09:15:00.000Z'
       },
       {
         id: 'showcase-4',
-        titulo: 'Sinalização de trânsito instalada',
-        descricao: 'Novas placas de pare e faixas de pedestres pintadas para maior segurança',
+        titulo: 'Falta de sinalizacao',
+        descricao: 'Falta de sinalizacao no cruzamento das principais ruas do Jardim Brasil',
         categoria: 'sinalizacao',
-        localizacao: 'Cruzamento Av. Brasil com Rua Central',
-        imagemUrl: '/uploads/exemplo-sinalizacao-resolvida.jpg',
+        localizacao: 'Av. Antônio Ribeiro Marques - Jardim Brasil',
+        imagemUrl: '/imagens-showcase/sinalizacao_de_transito_2.jpg',
         status: 'resolvido',
         resolvidoEm: '2025-10-20T11:45:00.000Z'
       }

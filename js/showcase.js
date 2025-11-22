@@ -82,7 +82,7 @@ function renderizarShowcase(resolvidos) {
 
 function criarCardShowcase(resolvido) {
   const imagemHtml = resolvido.imagemUrl
-    ? `<img src="http://localhost:3000${resolvido.imagemUrl}" class="card-img-top" alt="${resolvido.titulo}" style="height: 200px; object-fit: cover;">`
+    ? `<img src="http://localhost:3000${resolvido.imagemUrl}" class="card-img-top" alt="${resolvido.titulo}" style="height: 450px; object-fit: cover;">`
     : '';
 
   const dataResolucao = resolvido.resolvidoEm ? formatarData(resolvido.resolvidoEm) : 'Data não disponível';

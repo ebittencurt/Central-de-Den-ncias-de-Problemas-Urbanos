@@ -24,6 +24,9 @@ app.use(rateLimiter);
 // Servir arquivos estáticos da pasta uploads com CORS
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// Servir arquivos estáticos da pasta imagens-showcase
+app.use('/imagens-showcase', express.static(path.join(__dirname, '../imagens-showcase')));
+
 // Routes
 app.use('/api', routes);
 
